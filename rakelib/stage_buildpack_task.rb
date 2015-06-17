@@ -27,6 +27,7 @@ module Package
       source_files.map { |source| multitask PACKAGE_NAME => [copy_task(source, target(source))] }
       multitask PACKAGE_NAME => [version_task]
       disable_remote_downloads_task if BUILDPACK_VERSION.offline
+      pin_dependency_versions if BUILDPACK_VERSION.offline
     end
 
     private
@@ -47,6 +48,10 @@ module Package
         content = File.open(t.source, 'r') { |f| f.read.gsub(/enabled/, 'disabled') }
         File.open(t.name, 'w') { |f| f.write content }
       end
+    end
+
+    def pin_dependency_versions
+      
     end
 
     def target(source)
