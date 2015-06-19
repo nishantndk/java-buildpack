@@ -51,6 +51,14 @@ module JavaBuildpack
           configuration || {}
         end
 
+        # Write a new configuration file
+        def write(identifier, new_content, should_log = true)
+          file = CONFIG_DIRECTORY + "#{identifier}.yml"
+          file.delete if file.exist?
+          File.open(file, 'w') { |f| YAML.dump(new_content, f) }
+          logger.debug { "Writing configuration file #{file}" } if should_log
+        end
+
         private
 
         CONFIG_DIRECTORY = Pathname.new(File.expand_path('../../../config', File.dirname(__FILE__))).freeze
